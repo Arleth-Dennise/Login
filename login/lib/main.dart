@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:login/inicio_sesion.dart';
 import 'package:login/registro.dart';
-
 
 void main() {
   runApp(MyApp());
@@ -15,8 +15,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: RegistroPage(),
-      routes: const {
+      home: LoginPage(),
+      routes: {
+                '/registro': (context) => RegistroPage(),
+                '/inicio_sesion': (context) => LoginPage(),
       },
     );
   }
