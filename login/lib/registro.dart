@@ -11,12 +11,12 @@ class RegistroPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 245, 240, 246),
-      appBar: AppBar(
-        title: const Text('registro'),
-        backgroundColor: Color.fromARGB(255, 245, 240, 246),
-        foregroundColor: Color.fromARGB(255, 97, 22, 108),
-      ),
+      backgroundColor: Color.fromARGB(255, 246, 245, 240),
+      //appBar: AppBar(
+        //title: const Text('registro'),
+        //backgroundColor: Color.fromARGB(255, 246, 245, 240),
+        //foregroundColor: Color.fromARGB(255, 97, 22, 108),
+      //),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -24,13 +24,17 @@ class RegistroPage extends StatelessWidget {
             key: _formKey,
             child: Column(
               children: [
+                SizedBox(height: 20),
+                Image.asset('assets/images/imagen2.png', height: 200),
+                SizedBox(height: 10),
+
                 _CustomTextFormField(
                   controller: _nameController,
                   prefixIcon: Icons.person,
                   labelText: 'Nombre',
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Ingrese su nombre';
+                      return 'Please enter your name';
                     }
                     return null;
                   },
@@ -41,8 +45,8 @@ class RegistroPage extends StatelessWidget {
                   prefixIcon: Icons.email,
                   labelText: 'Correo',
                   validator: (value) {
-                    if (value!.isEmpty || !value.contains('@')) {
-                      return 'Ingreese su correo';
+                    if (value!.isEmpty ||!value.contains('@')) {
+                      return 'Please enter a valid email';
                     }
                     return null;
                   },
@@ -55,7 +59,7 @@ class RegistroPage extends StatelessWidget {
                   labelText: 'Teléfono',
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Ingrese su numero de telefono';
+                      return 'Please enter your phone number';
                     }
                     return null;
                   },
@@ -70,7 +74,7 @@ class RegistroPage extends StatelessWidget {
                   obscureText: true,
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Ingrese su contraseña';
+                      return 'Please enter your password';
                     }
                     return null;
                   },
@@ -83,8 +87,8 @@ class RegistroPage extends StatelessWidget {
                   labelText: 'Confirmar contraseña',
                   obscureText: true,
                   validator: (value) {
-                    if (value != _passwordController.text) {
-                      return 'La contraseña no es la misma';
+                    if (value!= _passwordController.text) {
+                      return 'Passwords do not match';
                     }
                     return null;
                   },
@@ -97,12 +101,25 @@ class RegistroPage extends StatelessWidget {
                       Navigator.pushReplacementNamed(context, '/inicio');
                     }
                   },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Color.fromARGB(255, 39, 34, 2), 
+                    backgroundColor: Color.fromARGB(255, 255, 249, 168), // Color del texto del botón
+                    textStyle: TextStyle(fontSize: 18), // Tamaño del texto del botón
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10), // Forma del botón
+                    ),
+                  ),
                   child: Text('Registrarse'),
                 ),
+                SizedBox(height: 10),
                 TextButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/inicio_sesion');
                   },
+                  style: TextButton.styleFrom(
+                    foregroundColor: Color.fromARGB(255, 84, 17, 42), 
+                    textStyle: TextStyle(fontSize: 16), // Tamaño del texto
+                  ),
                   child: Text('¿Ya tienes una cuenta? Iniciar sesión'),
                 ),
               ],
@@ -113,6 +130,7 @@ class RegistroPage extends StatelessWidget {
     );
   }
 }
+
 
 class _CustomTextFormField extends StatelessWidget {
   final TextEditingController controller;
