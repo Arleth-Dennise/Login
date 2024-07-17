@@ -30,7 +30,7 @@ class RegistroPage extends StatelessWidget {
                   labelText: 'Nombre',
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Please enter your name';
+                      return 'Ingrese su nombre';
                     }
                     return null;
                   },
@@ -42,7 +42,7 @@ class RegistroPage extends StatelessWidget {
                   labelText: 'Correo',
                   validator: (value) {
                     if (value!.isEmpty || !value.contains('@')) {
-                      return 'Please enter a valid email';
+                      return 'Ingreese su correo';
                     }
                     return null;
                   },
@@ -55,7 +55,7 @@ class RegistroPage extends StatelessWidget {
                   labelText: 'Teléfono',
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Please enter your phone number';
+                      return 'Ingrese su numero de telefono';
                     }
                     return null;
                   },
@@ -70,7 +70,7 @@ class RegistroPage extends StatelessWidget {
                   obscureText: true,
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Please enter your password';
+                      return 'Ingrese su contraseña';
                     }
                     return null;
                   },
@@ -84,7 +84,7 @@ class RegistroPage extends StatelessWidget {
                   obscureText: true,
                   validator: (value) {
                     if (value != _passwordController.text) {
-                      return 'Passwords do not match';
+                      return 'La contraseña no es la misma';
                     }
                     return null;
                   },

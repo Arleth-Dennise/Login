@@ -27,7 +27,7 @@ class LoginPage extends StatelessWidget {
                   labelText: 'Correo',
                   validator: (value) {
                     if (value!.isEmpty || !value.contains('@')) {
-                      return 'Please enter a valid email';
+                      return 'Ingresa un correo valido';
                     }
                     return null;
                   },
@@ -42,7 +42,7 @@ class LoginPage extends StatelessWidget {
                   obscureText: true,
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Please enter your password';
+                      return 'Ingresa tu contraseña';
                     }
                     return null;
                   },
