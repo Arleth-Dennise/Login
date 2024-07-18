@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +37,8 @@ class LoginPage extends StatelessWidget {
                       prefixIcon: Icons.email,
                       labelText: 'Correo',
                       validator: (value) {
-                        if (value!.isEmpty || !value.contains('@')) {
-                          return 'Ingrese un email valido';
+                        if (value!.isEmpty ||!value.contains('@')) {
+                          return 'Please enter a valid email';
                         }
                         return null;
                       },
@@ -42,30 +48,43 @@ class LoginPage extends StatelessWidget {
                     _CustomTextFormField(
                       controller: _passwordController,
                       prefixIcon: null,
-                      suffixIcon: Icons.visibility,
+                      suffixIcon: _obscureText? Icons.visibility_off : Icons.visibility,
                       labelText: 'Contraseña',
-                      obscureText: true,
+                      obscureText: _obscureText,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return 'Ingrese su contraseña';
+                          return 'Please enter your password';
                         }
                         return null;
+                      },
+                      onSuffixIconPressed: () {
+                        setState(() {
+                          _obscureText =!_obscureText;
+                        });
                       },
                     ),
                     SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          print('Inicio de sesión exitoso!');
-                          Navigator.pushReplacementNamed(context, '/home');
+                          String email = _emailController.text;
+                          String password = _passwordController.text;
+
+                          if ((email == 'correo1@correo.com' && password == '123456') ||
+                              (email == 'leslye.garcia@unah.hn' && password == '654321')) {
+                            print('Inicio de sesión exitoso!');
+                            Navigator.pushReplacementNamed(context, '/inicio', arguments: _emailController.text);
+                          } else {
+                            print('Credenciales inválidas');
+                          }
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                    foregroundColor: Color.fromARGB(255, 39, 34, 2), 
-                    backgroundColor: Color.fromARGB(255, 255, 137, 180), // Color del texto del botón
-                    textStyle: TextStyle(fontSize: 18), // Tamaño del texto del botón
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10), // Forma del botón
+                        foregroundColor: Color.fromARGB(255, 39, 34, 2), 
+                        backgroundColor: Color.fromARGB(255, 255, 137, 180), // Color del texto del botón
+                        textStyle: TextStyle(fontSize: 18), // Tamaño del texto del botón
+                        shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10), // Forma del botón
                       ),
                     ),
                       child: Text('Iniciar sesión'),
@@ -75,9 +94,9 @@ class LoginPage extends StatelessWidget {
                         Navigator.pushNamed(context, '/registro');
                       },
                       style: TextButton.styleFrom(
-                    foregroundColor: Color.fromARGB(255, 59, 56, 10), 
-                    textStyle: TextStyle(fontSize: 16), // Tamaño del texto
-                  ),
+                         foregroundColor: Color.fromARGB(255, 59, 56, 10), 
+                         textStyle: TextStyle(fontSize: 16), // Tamaño del texto
+                      ),
                       child: Text('¿No tienes una cuenta? Regístrate'),
                     ),
                   ],
@@ -91,7 +110,7 @@ class LoginPage extends StatelessWidget {
   }
 }
 
-class _CustomTextFormField extends StatelessWidget {
+class _CustomTextFormField extends StatefulWidget {
   final TextEditingController controller;
   final IconData? prefixIcon;
   final IconData? suffixIcon;
@@ -99,6 +118,7 @@ class _CustomTextFormField extends StatelessWidget {
   final bool obscureText;
   final FormFieldValidator<String>? validator;
   final TextInputType keyboardType;
+  final VoidCallback? onSuffixIconPressed;
 
   _CustomTextFormField({
     required this.controller,
@@ -108,24 +128,35 @@ class _CustomTextFormField extends StatelessWidget {
     this.obscureText = false,
     this.validator,
     this.keyboardType = TextInputType.text,
+    this.onSuffixIconPressed,
   });
 
   @override
+  _CustomTextFormFieldState createState() => _CustomTextFormFieldState();
+}
+
+class _CustomTextFormFieldState extends State<_CustomTextFormField> {
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: controller,
+      controller: widget.controller,
       decoration: InputDecoration(
-        prefixIcon: prefixIcon != null ? Icon(prefixIcon, size: 20) : null,
-        suffixIcon: suffixIcon != null ? Icon(suffixIcon, size: 20) : null,
-        labelText: labelText,
+        prefixIcon: widget.prefixIcon!= null? Icon(widget.prefixIcon, size: 20) : null,
+        suffixIcon: widget.suffixIcon!= null
+           ? IconButton(
+                icon: Icon(widget.suffixIcon, size: 20),
+                onPressed: widget.onSuffixIconPressed,
+              )
+            : null,
+        labelText: widget.labelText,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(color: Colors.grey),
         ),
       ),
-      obscureText: obscureText,
-      validator: validator,
-      keyboardType: keyboardType,
+      obscureText: widget.obscureText,
+      validator: widget.validator,
+      keyboardType: widget.keyboardType,
     );
   }
 }

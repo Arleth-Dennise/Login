@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 
-class RegistroPage extends StatelessWidget {
+class RegistroPage extends StatefulWidget {
+  @override
+  _RegistroPageState createState() => _RegistroPageState();
+}
+
+class _RegistroPageState extends State<RegistroPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  bool _obscureText = true;
+  bool _obscureConfirmPassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +40,8 @@ class RegistroPage extends StatelessWidget {
                   prefixIcon: Icons.person,
                   labelText: 'Nombre',
                   validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Ingrese su nombre';
+                    if (value!.length < 3 || value.length > 10) {
+                      return 'El nombre debe tener entre 3 y 10 caracteres';
                     }
                     return null;
                   },
@@ -45,8 +52,8 @@ class RegistroPage extends StatelessWidget {
                   prefixIcon: Icons.email,
                   labelText: 'Correo',
                   validator: (value) {
-                    if (value!.isEmpty ||!value.contains('@')) {
-                      return 'Ingrese su email';
+                    if (!value!.contains('@') ||!value.endsWith('.edu.hn')) {
+                      return 'El correo debe ser válido y terminar con.edu.hn';
                     }
                     return null;
                   },
@@ -58,8 +65,8 @@ class RegistroPage extends StatelessWidget {
                   prefixIcon: Icons.phone,
                   labelText: 'Teléfono',
                   validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Ingrese su numero telefonico';
+                    if (value!.length!= 8 || (value[0]!= '3' && value[0]!= '9' && value[0]!= '8')) {
+                      return 'El teléfono debe tener 8 dígitos y empezar con 3 o 9';
                     }
                     return null;
                   },
@@ -69,28 +76,38 @@ class RegistroPage extends StatelessWidget {
                 _CustomTextFormField(
                   controller: _passwordController,
                   prefixIcon: null,
-                  suffixIcon: Icons.visibility,
+                  suffixIcon: _obscureText? Icons.visibility_off : Icons.visibility,
                   labelText: 'Contraseña',
-                  obscureText: true,
+                  obscureText: _obscureText,
                   validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Ingrese su contraseña';
+                    if (value!.length < 8 ||!value.contains(RegExp(r'[A-Z]')) ||!value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+                      return 'minimo 8 letras, una mayúscula y un carácter especial';
                     }
                     return null;
+                  },
+                  onSuffixIconPressed: () {
+                    setState(() {
+                      _obscureText =!_obscureText;
+                    });
                   },
                 ),
                 SizedBox(height: 10),
                 _CustomTextFormField(
                   controller: _confirmPasswordController,
                   prefixIcon: null,
-                  suffixIcon: Icons.visibility,
+                  suffixIcon: _obscureConfirmPassword? Icons.visibility_off : Icons.visibility,
                   labelText: 'Confirmar contraseña',
-                  obscureText: true,
+                  obscureText: _obscureConfirmPassword,
                   validator: (value) {
                     if (value!= _passwordController.text) {
-                      return 'La contraseña no es la misma';
+                      return 'Las contraseñas no coinciden';
                     }
                     return null;
+                  },
+                  onSuffixIconPressed: () {
+                    setState(() {
+                      _obscureConfirmPassword =!_obscureConfirmPassword;
+                    });
                   },
                 ),
                 SizedBox(height: 20),
@@ -98,7 +115,10 @@ class RegistroPage extends StatelessWidget {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       print('Registro exitoso!');
-                      Navigator.pushReplacementNamed(context, '/inicio');
+                      print('Nombre: ${_nameController.text}');
+                      print('Correo: ${_emailController.text}');
+                      print('Teléfono: ${_phoneController.text}');
+                      print('Contraseña: ${_passwordController.text}');
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -111,7 +131,6 @@ class RegistroPage extends StatelessWidget {
                   ),
                   child: Text('Registrarse'),
                 ),
-                SizedBox(height: 10),
                 TextButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/inicio_sesion');
@@ -131,8 +150,7 @@ class RegistroPage extends StatelessWidget {
   }
 }
 
-
-class _CustomTextFormField extends StatelessWidget {
+class _CustomTextFormField extends StatefulWidget {
   final TextEditingController controller;
   final IconData? prefixIcon;
   final IconData? suffixIcon;
@@ -140,6 +158,7 @@ class _CustomTextFormField extends StatelessWidget {
   final bool obscureText;
   final FormFieldValidator<String>? validator;
   final TextInputType keyboardType;
+  final VoidCallback? onSuffixIconPressed;
 
   _CustomTextFormField({
     required this.controller,
@@ -149,24 +168,36 @@ class _CustomTextFormField extends StatelessWidget {
     this.obscureText = false,
     this.validator,
     this.keyboardType = TextInputType.text,
+    this.onSuffixIconPressed,
   });
+
+  @override
+  _CustomTextFormFieldState createState() => _CustomTextFormFieldState();
+}
+
+class _CustomTextFormFieldState extends State<_CustomTextFormField> {
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: controller,
+      controller: widget.controller,
       decoration: InputDecoration(
-        prefixIcon: prefixIcon != null ? Icon(prefixIcon, size: 20) : null,
-        suffixIcon: suffixIcon != null ? Icon(suffixIcon, size: 20) : null,
-        labelText: labelText,
+        prefixIcon: widget.prefixIcon != null ? Icon(widget.prefixIcon, size: 20) : null,
+        suffixIcon: widget.suffixIcon!= null
+           ? IconButton(
+                icon: Icon(widget.suffixIcon, size: 20),
+                onPressed: widget.onSuffixIconPressed,
+              )
+            : null,
+        labelText: widget.labelText,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(color: Colors.grey),
         ),
       ),
-      obscureText: obscureText,
-      validator: validator,
-      keyboardType: keyboardType,
+      obscureText: widget.obscureText,
+      validator: widget.validator,
+      keyboardType: widget.keyboardType,
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:login/inicio.dart';
 import 'package:login/inicio_sesion.dart';
 import 'package:login/registro.dart';
 
@@ -10,14 +11,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Login App',
+      title: 'Login App',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
       home: LoginPage(),
       routes: {
                 '/registro': (context) => RegistroPage(),
+                '/inicio': (context) => InicioPage(),
                 '/inicio_sesion': (context) => LoginPage(),
       },
     );
