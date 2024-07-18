@@ -18,7 +18,7 @@ class _RegistroPageState extends State<RegistroPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 246, 245, 240),
+      backgroundColor: Color.fromARGB(255, 240, 241, 246),
       //appBar: AppBar(
         //title: const Text('registro'),
         //backgroundColor: Color.fromARGB(255, 246, 245, 240),

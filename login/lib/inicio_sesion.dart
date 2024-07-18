@@ -10,11 +10,12 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscureText = true;
+  String _errorMessage = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 246, 245, 240),
+      backgroundColor: Color.fromARGB(255, 240, 241, 246),
       //appBar: AppBar(
         //title: const Text('Iniciar sesión'),
         //backgroundColor: Color.fromARGB(255, 246, 245, 240),
@@ -38,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
                       labelText: 'Correo',
                       validator: (value) {
                         if (value!.isEmpty ||!value.contains('@')) {
-                          return 'Please enter a valid email';
+                          return 'Ingrese un correo valido';
                         }
                         return null;
                       },
@@ -53,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
                       obscureText: _obscureText,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return 'Please enter your password';
+                          return 'Ingrese su contraseña';
                         }
                         return null;
                       },
@@ -69,13 +70,22 @@ class _LoginPageState extends State<LoginPage> {
                         if (_formKey.currentState!.validate()) {
                           String email = _emailController.text;
                           String password = _passwordController.text;
-
-                          if ((email == 'correo1@correo.com' && password == '123456') ||
+                          
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+                          if ((email == 'arleth.oseguera@unah.hn' && password == '123456') ||
                               (email == 'leslye.garcia@unah.hn' && password == '654321')) {
                             print('Inicio de sesión exitoso!');
                             Navigator.pushReplacementNamed(context, '/inicio', arguments: _emailController.text);
                           } else {
-                            print('Credenciales inválidas');
+                            setState(() {
+                              _errorMessage = 'Credenciales inválidas';
+                            });
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(_errorMessage),
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
                           }
                         }
                       },
@@ -89,6 +99,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                       child: Text('Iniciar sesión'),
                     ),
+                    Text(_errorMessage, style: TextStyle(color: Colors.red)),
                     TextButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/registro');
