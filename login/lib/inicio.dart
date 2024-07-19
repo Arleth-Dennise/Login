@@ -23,7 +23,7 @@ class InicioPage extends StatelessWidget {
         actions: [
           GestureDetector( 
             onTap: () {
-              Navigator.of(context).pushReplacementNamed('/inicio_sesion');
+              //Navigator.of(context).pushReplacementNamed('/inicio_sesion');
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),
