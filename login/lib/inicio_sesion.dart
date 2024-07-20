@@ -72,8 +72,8 @@ class _LoginPageState extends State<LoginPage> {
                           String password = _passwordController.text;
                           
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
-                          if ((email == 'arleth.oseguera@unah.hn' && password == '123456') ||
-                              (email == 'leslye.garcia@unah.hn' && password == '654321')) {
+                          if ((email == 'arleth.oseguera@unah.hn' && password == '20212020883') ||
+                              (email == 'leslye.garcia@unah.hn' && password == '20212020467')) {
                             print('Inicio de sesión exitoso!');
                             Navigator.pushReplacementNamed(context, '/inicio', arguments: _emailController.text);
                           } else {
